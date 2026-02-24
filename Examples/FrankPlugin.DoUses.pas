@@ -41,7 +41,7 @@ end;
 
 function GetPluginName: WideString; stdcall;
 begin
-  Result := 'FrankPlugin';
+  Result := 'Frank''s Uses';
 end;
 
 // Helper: Sucht den {} Breakline-Kommentar

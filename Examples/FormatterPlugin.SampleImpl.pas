@@ -85,7 +85,7 @@ end;
 
 function GetPluginName: WideString; stdcall;
 begin
-  Result := 'FormatterPlugin';
+  Result := 'Sample-Formatter';
 end;
 
 // 1. DoNewLine - Line break (aNode is nil)
