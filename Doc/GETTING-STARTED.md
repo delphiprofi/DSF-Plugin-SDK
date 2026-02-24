@@ -20,6 +20,7 @@ uses
 
 exports
   GetPluginVersion,
+  GetPluginName,
   DoUses;           // export only what you want to override
 
 begin
@@ -51,7 +52,7 @@ function DoUses(aNode: IPluginNode; aWriter: IPluginWriter;
   - `NormalizeUnitName('name')` — normalize a unit name
 - **`aRules`** — The current formatting rules (read-only record)
 
-## Step 3: The Required Export
+## Step 3: Required and Recommended Exports
 
 Every plugin **must** export `GetPluginVersion`:
 
@@ -61,6 +62,19 @@ begin
   Result := PLUGIN_API_VERSION;  // from PluginSDK.pas
 end;
 ```
+
+Additionally, a plugin **should** export `GetPluginName` so the host can display
+a human-readable name:
+
+```pascal
+function GetPluginName: WideString; stdcall;
+begin
+  Result := 'MyPlugin';
+end;
+```
+
+> `GetPluginName` is optional — existing plugins without this export will
+> continue to work.
 
 ## Step 4: Compile and Deploy
 

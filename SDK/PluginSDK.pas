@@ -189,8 +189,9 @@ type
   // Unified signature for all Do* plugin functions
   TPluginDoFunc = function(aNode: IPluginNode; aWriter: IPluginWriter; aHost: IPluginHost; aRules: PPluginRules): LongBool; stdcall;
 
-  // Required export
+  // Required exports
   TGetPluginVersion = function: Integer; stdcall;
+  TGetPluginName    = function: WideString; stdcall;
 
 implementation
 

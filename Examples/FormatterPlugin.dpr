@@ -24,6 +24,7 @@ uses
 exports
   // Pflicht
   GetPluginVersion,
+  GetPluginName,
 
   // Alle 37 Do*-Funktionen (optional — nur exportieren was man ueberschreiben will)
   DoNewLine,

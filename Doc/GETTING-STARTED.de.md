@@ -20,6 +20,7 @@ uses
 
 exports
   GetPluginVersion,
+  GetPluginName,
   DoUses;           // nur exportieren, was man überschreiben will
 
 begin
@@ -51,7 +52,7 @@ function DoUses(aNode: IPluginNode; aWriter: IPluginWriter;
   - `NormalizeUnitName('name')` — Unit-Namen normalisieren
 - **`aRules`** — Die aktuellen Formatierungsregeln (nur lesen)
 
-## Schritt 3: Pflicht-Export
+## Schritt 3: Pflicht- und empfohlene Exports
 
 Jedes Plugin **muss** `GetPluginVersion` exportieren:
 
@@ -61,6 +62,19 @@ begin
   Result := PLUGIN_API_VERSION;  // aus PluginSDK.pas
 end;
 ```
+
+Zusätzlich **sollte** ein Plugin `GetPluginName` exportieren, damit der Host
+einen lesbaren Namen anzeigen kann:
+
+```pascal
+function GetPluginName: WideString; stdcall;
+begin
+  Result := 'MeinPlugin';
+end;
+```
+
+> `GetPluginName` ist optional — bestehende Plugins ohne diesen Export
+> funktionieren weiterhin.
 
 ## Schritt 4: Kompilieren und bereitstellen
 

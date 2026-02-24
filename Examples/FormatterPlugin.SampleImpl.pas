@@ -25,8 +25,9 @@ Uses
 , PluginSDK
 ;
 
-// --- Required Export ---
+// --- Required Exports ---
 function GetPluginVersion: Integer; stdcall;
+function GetPluginName: WideString; stdcall;
 
 // --- All 37 Do* Functions ---
 function DoNewLine     (aNode: IPluginNode; aWriter: IPluginWriter; aHost: IPluginHost; aRules: PPluginRules): LongBool; stdcall;
@@ -76,10 +77,15 @@ begin
     aHost.Dispatch(aNode.GetChild(i));
 end;
 
-// Required export
+// Required exports
 function GetPluginVersion: Integer; stdcall;
 begin
   Result := PLUGIN_API_VERSION;
+end;
+
+function GetPluginName: WideString; stdcall;
+begin
+  Result := 'FormatterPlugin';
 end;
 
 // 1. DoNewLine - Line break (aNode is nil)

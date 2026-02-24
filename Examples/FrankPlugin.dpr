@@ -15,6 +15,7 @@ uses
 
 exports
   GetPluginVersion,
+  GetPluginName,
   DoUses;
 
 begin

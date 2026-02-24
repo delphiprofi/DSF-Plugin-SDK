@@ -4,6 +4,18 @@ All notable changes to the DSF Plugin SDK will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.6-alpha] - 2026-02-24
+
+### Added
+- New optional export `GetPluginName: WideString; stdcall;` — allows a plugin
+  to report its display name at runtime
+- `TGetPluginName` type added to `PluginSDK.pas`
+- Host loader reads `GetPluginName` and stores it in `TLoadedPlugin.PluginName`
+
+### Note
+`GetPluginName` is **optional**. Existing plugins without this export continue
+to work — the host will simply use an empty string as the plugin name.
+
 ## [0.5-alpha] - 2026-02-24
 
 ### Added

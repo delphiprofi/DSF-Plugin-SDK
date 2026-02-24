@@ -29,6 +29,7 @@ Uses
 ;
 
 function GetPluginVersion: Integer; stdcall;
+function GetPluginName: WideString; stdcall;
 function DoUses(aNode: IPluginNode; aWriter: IPluginWriter; aHost: IPluginHost; aRules: PPluginRules): LongBool; stdcall;
 
 implementation
@@ -36,6 +37,11 @@ implementation
 function GetPluginVersion: Integer; stdcall;
 begin
   Result := PLUGIN_API_VERSION;
+end;
+
+function GetPluginName: WideString; stdcall;
+begin
+  Result := 'FrankPlugin';
 end;
 
 // Helper: Sucht den {} Breakline-Kommentar
