@@ -1,11 +1,11 @@
-# Getting Started with FDK-Formatter Plugins
+# Getting Started with DSF Plugins
 
 > 🇩🇪 [Deutsche Version](GETTING-STARTED.de.md)
 
 ## Prerequisites
 
 - Delphi (10.x or newer recommended) or Free Pascal
-- The FDK-Formatter installed
+- The DSF (Delphi Sourcecode Formatter) installed
 
 ## Step 1: Create a DLL Project
 
@@ -65,7 +65,7 @@ end;
 ## Step 4: Compile and Deploy
 
 1. Compile your DLL
-2. Place it in the FDK-Formatter's plugin directory
+2. Place it in the DSF's plugin directory
 3. The formatter will automatically detect and load the plugin
 
 ## Tips

@@ -1,11 +1,11 @@
-# Erste Schritte mit FDK-Formatter Plugins
+# Erste Schritte mit DSF Plugins
 
 > 🇬🇧 [English Version](GETTING-STARTED.md)
 
 ## Voraussetzungen
 
 - Delphi (10.x oder neuer empfohlen) oder Free Pascal
-- Der FDK-Formatter muss installiert sein
+- Der DSF (Delphi Sourcecode Formatter) muss installiert sein
 
 ## Schritt 1: DLL-Projekt anlegen
 
@@ -65,7 +65,7 @@ end;
 ## Schritt 4: Kompilieren und bereitstellen
 
 1. DLL kompilieren
-2. In das Plugin-Verzeichnis des FDK-Formatters legen
+2. In das Plugin-Verzeichnis des DSF legen
 3. Der Formatter erkennt und lädt das Plugin automatisch
 
 ## Tipps

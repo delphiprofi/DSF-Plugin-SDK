@@ -1,11 +1,11 @@
-# FDK-Formatter Plugin SDK
+# DSF Plugin SDK
 
 **Version 0.5 Alpha**
 
 > 🇬🇧 [English Version](README.md)
 
-Das **FDK-Formatter Plugin SDK** ermöglicht es, eigene Formatierungs-Plugins für den
-[FDK Delphi Source Code Formatter](https://delphiprofi.de) zu schreiben.
+Das **DSF Plugin SDK** ermöglicht es, eigene Formatierungs-Plugins für den
+[Delphiprofi DSF (Delphi Sourcecode Formatter)](https://delphiprofi.de) zu schreiben.
 Ein Plugin ist eine gewöhnliche Windows-DLL, die eine oder mehrere `Do*`-Funktionen
 exportiert. Der Formatter ruft diese Funktionen anstelle seiner eingebauten Logik
 auf — damit hat man volle Kontrolle darüber, wie bestimmte Sprachkonstrukte
@@ -41,13 +41,13 @@ Doc/
 1. `SDK/PluginSDK.pas` ins eigene Projekt kopieren
 2. Ein `library`-Projekt (DLL) erstellen
 3. `GetPluginVersion` (Pflicht) und die gewünschten `Do*`-Funktionen exportieren
-4. Kompilieren und die DLL dort ablegen, wo der FDK-Formatter sie findet
+4. Kompilieren und die DLL dort ablegen, wo der DSF sie findet
 
 Siehe [Doc/GETTING-STARTED.de.md](Doc/GETTING-STARTED.de.md) für eine ausführliche Anleitung.
 
 ## So funktioniert es
 
-Der FDK-Formatter parst Delphi-Quellcode in einen abstrakten Syntaxbaum (AST).
+Der DSF parst Delphi-Quellcode in einen abstrakten Syntaxbaum (AST).
 Bei der Ausgabe prüft der Formatter für jeden Knotentyp, ob ein Plugin die
 entsprechende `Do*`-Funktion exportiert. Falls ja, wird die Plugin-Funktion
 mit vier Parametern aufgerufen:
