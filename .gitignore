@@ -1,0 +1,47 @@
+# Delphi compiled files
+*.dcu
+*.exe
+*.dll
+*.bpl
+*.dcp
+*.so
+*.apk
+*.drc
+*.map
+*.dres
+*.rsm
+*.tds
+*.dof
+*.cfg
+*.~*
+*.stat
+
+# Delphi project local files
+*.dproj.local
+*.groupproj.local
+*.identcache
+*.projdata
+*.tvsconfig
+*.dsk
+
+# Delphi history/recovery
+__history/
+__recovery/
+
+# Build output
+Win32/
+Win64/
+OSX32/
+OSX64/
+Android/
+iOS/
+Linux64/
+
+# Temporary files
+*.tmp
+*.bak
+*.orig
+
+# IDE files
+.augment/
+
