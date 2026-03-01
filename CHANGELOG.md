@@ -4,6 +4,18 @@ All notable changes to the DSF Plugin SDK will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.7-alpha] - 2026-03-01
+
+### Added
+- `METHOD_CLASS_FUNCTION` and `METHOD_CLASS_PROCEDURE` constants for class method support
+- `CALL_NONE`, `CALL_VAR`, `CALL_CONST`, `CALL_OUT` constants for parameter call-type modifiers
+- Extended named-children documentation: `Param.0`..`Param.N`, `ParamCount`, `TypeDec`, `Modifiers`
+
+### Changed
+- `FormatterPlugin.SampleImpl.pas` now uses `SysUtils` instead of `System.SysUtils` for broader Delphi version compatibility
+- `FormatterPlugin.SampleImpl.pas` uses classic `var` blocks instead of inline `for var` declarations for pre-10.3 compatibility
+- `FrankPlugin` `GetPluginName` returns `'FrankPlugin'` instead of `'Frank''s Uses'`
+
 ## [0.6-alpha] - 2026-02-24
 
 ### Added

@@ -1,6 +1,6 @@
 # DSF Plugin SDK
 
-**Version 0.6 Alpha**
+**Version 0.7 Alpha**
 
 > 🇩🇪 [Deutsche Version](README.de.md)
 

@@ -101,10 +101,18 @@ const
   COND_END         = 4;  // {$ENDIF}
 
   // --- Method Kinds (= Ord(TMethodKind)) ---
-  METHOD_PROCEDURE   = 0;
-  METHOD_FUNCTION    = 1;
-  METHOD_CONSTRUCTOR = 2;
-  METHOD_DESTRUCTOR  = 3;
+  METHOD_PROCEDURE       = 0;
+  METHOD_FUNCTION        = 1;
+  METHOD_CONSTRUCTOR     = 2;
+  METHOD_DESTRUCTOR      = 3;
+  METHOD_CLASS_FUNCTION  = 4;
+  METHOD_CLASS_PROCEDURE = 5;
+
+  // --- Call Types (= Ord(TCallType)) for Param.SubKind ---
+  CALL_NONE  = 0;
+  CALL_VAR   = 1;
+  CALL_CONST = 2;
+  CALL_OUT   = 3;
 
   // --- Visibility (= Ord(TVisibility)) ---
   VIS_PRIVATE   = 0;
@@ -126,7 +134,8 @@ const
   // IPas_While:     'Condition', 'Content'
   // IPas_With:      'Context', 'Content'
   // IPas_Repeat:    (token children only)
-  // IPas_Method:    'Declare.0'..'Declare.N'
+  // IPas_Method:    'Declare.0'..'Declare.N', 'Modifiers', 'Param.0'..'Param.N'
+  // IPas_Param:     'TypeDec'  (GetText=Name, GetSubKind=Ord(TCallType))
   // IPas_Unit:      'InterfaceSection', 'ImplementationSection'
   // IPas_Program:   'Section'
   //

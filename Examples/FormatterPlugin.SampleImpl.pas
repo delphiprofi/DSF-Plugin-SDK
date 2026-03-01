@@ -21,7 +21,7 @@ unit FormatterPlugin.SampleImpl;
 interface
 
 Uses
-  System.SysUtils
+  SysUtils
 , PluginSDK
 ;
 
@@ -72,8 +72,10 @@ implementation
 
 // Helper: Dispatch all children to the host dispatcher
 procedure DispatchChildren(aNode: IPluginNode; aHost: IPluginHost);
+var
+  i: integer;
 begin
-  for var i := 0 to aNode.ChildCount - 1 do
+  for i := 0 to aNode.ChildCount - 1 do
     aHost.Dispatch(aNode.GetChild(i));
 end;
 
@@ -171,14 +173,16 @@ end;
 // 10. DoSection - interface/implementation / aNode.GetTyp = PTYP_INTERFACE_SECTION / PTYP_IMPLEMENTATION_SECTION
 function DoSection(aNode: IPluginNode; aWriter: IPluginWriter; aHost: IPluginHost; aRules: PPluginRules): LongBool; stdcall;
 var lChild: IPluginNode;
+var b: integer;
+var i: integer;
 begin
   if aNode.GetTyp = PTYP_INTERFACE_SECTION then
     aWriter.Writeln(aHost.ApplyCase('interface'))
   else
     aWriter.Writeln(aHost.ApplyCase('implementation'));
-  for var b := 1 to aRules^.AfterSectionKeyword do
+  for b := 1 to aRules^.AfterSectionKeyword do
     aWriter.NewLine;
-  for var i := 0 to aNode.ChildCount - 1 do
+  for i := 0 to aNode.ChildCount - 1 do
     begin
       lChild := aNode.GetChild(i);
       if (i = 0) and (lChild.GetTyp = PTYP_NEWLINE) then
@@ -193,17 +197,20 @@ function DoUses(aNode: IPluginNode; aWriter: IPluginWriter; aHost: IPluginHost; 
 var
   lChild: IPluginNode;
   lMaxLen: Integer;
+  i: integer;
+  lText: string;
+  lName: string;
 begin
   lMaxLen := aRules^.UsesMaxLineLength;
   aWriter.Writeln(aHost.ApplyCase('uses'));
   aWriter.DoIndent;
-  for var i := 0 to aNode.ChildCount - 1 do
+  for i := 0 to aNode.ChildCount - 1 do
     begin
       lChild := aNode.GetChild(i);
       case lChild.GetTyp of
         PTYP_NEWLINE:   ;
         PTYP_SEPARATOR: begin
-                           var lText := lChild.GetText;
+                           lText := lChild.GetText;
                            if lText = ',' then
                              begin
                                aWriter.Write(',');
@@ -213,13 +220,13 @@ begin
                              aWriter.Write(lText);
                          end;
         PTYP_STATIC:    begin
-                           var lName := aHost.NormalizeUnitName(lChild.GetText);
+                           lName := aHost.NormalizeUnitName(lChild.GetText);
                            if (lMaxLen > 0) and (aWriter.LineLength + Length(lName) > lMaxLen) then
                              aWriter.NewLine;
                            aWriter.Write(lName);
                          end;
         PTYP_UNIT:      begin
-                           var lName := aHost.NormalizeUnitName(lChild.GetText);
+                           lName := aHost.NormalizeUnitName(lChild.GetText);
                            aWriter.Write(lName);
                          end;
         PTYP_COMMENT:   aHost.Dispatch(lChild);
@@ -279,6 +286,7 @@ function DoConstSection(aNode: IPluginNode; aWriter: IPluginWriter; aHost: IPlug
 var
   lChild: IPluginNode;
   lStart: Integer;
+  i: integer;
 begin
   aWriter.Writeln(aHost.ApplyCase('const'));
   aWriter.DoIndent;
@@ -289,7 +297,7 @@ begin
       if lChild.GetTyp <> PTYP_NEWLINE then Break;
       Inc(lStart);
     end;
-  for var i := lStart to aNode.ChildCount - 1 do
+  for i := lStart to aNode.ChildCount - 1 do
     aHost.Dispatch(aNode.GetChild(i));
   aWriter.DoUnIndent;
   aWriter.NewLine;
@@ -301,6 +309,7 @@ function DoVarSection(aNode: IPluginNode; aWriter: IPluginWriter; aHost: IPlugin
 var
   lChild: IPluginNode;
   lStart: Integer;
+  i: integer;
 begin
   aWriter.Writeln(aHost.ApplyCase('var'));
   aWriter.DoIndent;
@@ -311,7 +320,7 @@ begin
       if lChild.GetTyp <> PTYP_NEWLINE then Break;
       Inc(lStart);
     end;
-  for var i := lStart to aNode.ChildCount - 1 do
+  for i := lStart to aNode.ChildCount - 1 do
     aHost.Dispatch(aNode.GetChild(i));
   aWriter.DoUnIndent;
   aWriter.NewLine;
@@ -323,6 +332,7 @@ function DoTypeSection(aNode: IPluginNode; aWriter: IPluginWriter; aHost: IPlugi
 var
   lChild: IPluginNode;
   lStart: Integer;
+  i: integer;
 begin
   aWriter.Writeln(aHost.ApplyCase('type'));
   aWriter.DoIndent;
@@ -333,7 +343,7 @@ begin
       if lChild.GetTyp <> PTYP_NEWLINE then Break;
       Inc(lStart);
     end;
-  for var i := lStart to aNode.ChildCount - 1 do
+  for i := lStart to aNode.ChildCount - 1 do
     aHost.Dispatch(aNode.GetChild(i));
   aWriter.DoUnIndent;
   aWriter.NewLine;
@@ -400,13 +410,15 @@ end;
 
 // 24. DoCall - Function/procedure call / aNode.GetText = name / children = parameters
 function DoCall(aNode: IPluginNode; aWriter: IPluginWriter; aHost: IPluginHost; aRules: PPluginRules): LongBool; stdcall;
+var
+  i: integer;
 begin
   aWriter.Write(aNode.GetText);
   aWriter.DoIndent;
   if aNode.ChildCount > 0 then
     begin
       aWriter.Write('(');
-      for var i := 0 to aNode.ChildCount - 1 do
+      for i := 0 to aNode.ChildCount - 1 do
         begin
           if i > 0 then
             aWriter.Write(', ');

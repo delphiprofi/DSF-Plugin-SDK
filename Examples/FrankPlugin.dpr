@@ -6,8 +6,8 @@ library FrankPlugin;
 // ==>     D    D       S  F
 // =>     DDDDD   SSSSS   F             Version 2018 - 2026
 
-// FDK-Formatter Frank-Style Plugin-DLL (M4)
-// Ueberschreibt nur DoUses mit Franks zweiphasiger Formatierung
+// FDK-Formatter Frank-Style Plugin-DLL (Legacy Online Feature Set)
+// Ueberschreibt nur DoUses.
 
 uses
   PluginSDK in 'PluginSDK.pas',
