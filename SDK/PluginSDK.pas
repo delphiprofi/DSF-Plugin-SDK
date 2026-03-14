@@ -1,4 +1,4 @@
-﻿unit PluginSDK;
+unit PluginSDK;
 
 // =====>     DDDDD    SSSSS  FFFFFF    Delphi Sourcecode Formatter
 // ====>     D    D  S       F          © F. Lauter   aka Mavarik
@@ -88,6 +88,23 @@ const
   PTYP_WITH                   = 54;
   PTYP_REPEAT                 = 55;
 
+  // --- Static TokenKind (= Ord(TTokenKind)) for PTYP_STATIC.SubKind ---
+  // Allows plugins to distinguish identifiers (tkName) from keywords/operators (tkToken)
+  // without doing expensive SameText keyword lists.
+  // Values must match cToken_Kind* constants in Delphiprofi.DSF.TokenMaskDefs.pas
+  TK_UNKNOWN     = 0;   // cToken_KindUnknown    = $00
+  TK_NAME        = 1;   // cToken_KindName       = $01
+  TK_TOKEN       = 2;   // cToken_KindToken      = $02
+  TK_SEPARATOR   = 3;   // cToken_KindSeparator  = $03
+  TK_FULLCOMMENT = 4;   // cToken_KindComment    = $04
+  TK_NEWLINE     = 5;   // cToken_KindNewLine    = $05
+  TK_TEXT        = 6;   // cToken_KindText       = $06
+  TK_STRING      = 7;   // cToken_KindString     = $07
+  TK_RAWTEXT     = 8;   // cToken_KindRawText    = $08
+  TK_NUMBER      = 9;   // cToken_KindNumber     = $09
+  TK_CHARCODE    = 10;  // cToken_KindCharCode   = $0A
+  TK_CONDITION   = 11;  // cToken_KindCondition  = $0B
+
   // --- Comment Kinds (= Ord(TCommentKind)) ---
   COMMENT_LINE     = 0;  // //
   COMMENT_ONECHAR  = 1;  // { }
@@ -134,33 +151,61 @@ const
   // IPas_While:     'Condition', 'Content'
   // IPas_With:      'Context', 'Content'
   // IPas_Repeat:    (token children only)
-  // IPas_Method:    'Declare.0'..'Declare.N', 'Modifiers', 'Param.0'..'Param.N'
+  // IPas_Method:    'Generics', 'ReturnTypeTokens', 'Declare.0'..'Declare.N',
+  //                 'Modifiers', 'Param.0'..'Param.N'
   // IPas_Param:     'TypeDec'  (GetText=Name, GetSubKind=Ord(TCallType))
+  // IPas_Class:     'Inheritance'
+  // IPas_Interface: 'Inheritance'
+  // IPas_VariantCase: 'Condition', 'Fields', 'Branch.0'..'Branch.N'
   // IPas_Unit:      'InterfaceSection', 'ImplementationSection'
   // IPas_Program:   'Section'
   //
   // For all:        'Parent'
+  cSubParent                 = 'Parent';
+  cSubCondition              = 'Condition';
+  cSubThenBranch             = 'ThenBranch';
+  cSubElseBranch             = 'ElseBranch';
+  cSubContent                = 'Content';
+  cSubHandler                = 'Handler';
+  cSubStart                  = 'Start';
+  cSubDirection              = 'Direction';
+  cSubEndValue               = 'EndValue';
+  cSubContext                = 'Context';
+  cSubSection                = 'Section';
+  cSubInterfaceSection       = 'InterfaceSection';
+  cSubImplementationSection  = 'ImplementationSection';
+  cSubTypeDec                = 'TypeDec';
+  cSubGenerics               = 'Generics';
+  cSubReturnTypeTokens       = 'ReturnTypeTokens';
+  cSubModifiers              = 'Modifiers';
+  cSubInheritance            = 'Inheritance';
+  cSubFields                 = 'Fields';
+  cSubMetaCol                = 'Meta.Col';
+
+function SubBranchName(aIndex: Integer): WideString;
+function SubDeclareName(aIndex: Integer): WideString;
+function SubParamName(aIndex: Integer): WideString;
 
 type
   PPluginRules = ^TPluginRules;
   TPluginRules = packed record
-    BlockIndent:         Integer;
-    KeywordCase:         Integer;     // KC_LOWER / KC_CAPITAL / KC_UPPER
-    UsesMaxLineLength:   Integer;
-    AfterSectionKeyword: Integer;
-    BetweenMethods:      Integer;
-    AfterUses:           Integer;
-    AlignmentConstants:  LongBool;
-    AlignmentVarColon:   LongBool;
-    SpaceAfterOpenParen: LongBool;
-    SpaceBeforeCloseParen : LongBool;
-    SpaceBeforeColon:    LongBool;
-    SpaceAfterColon:     LongBool;
-    SpaceAroundAssign:   LongBool;
-    SpaceAroundOperator: LongBool;
-    SpaceAfterComma:     LongBool;
-    SpaceBeforeSemicolon: LongBool;
-    BeginOnNewLine:      LongBool;
+    BlockIndent:           Integer;
+    KeywordCase:           Integer;   // KC_LOWER / KC_CAPITAL / KC_UPPER
+    UsesMaxLineLength:     Integer;
+    AfterSectionKeyword:   Integer;
+    BetweenMethods:        Integer;
+    AfterUses:             Integer;
+    AlignmentConstants:    LongBool;
+    AlignmentVarColon:     LongBool;
+    SpaceAfterOpenParen:   LongBool;
+    SpaceBeforeCloseParen: LongBool;
+    SpaceBeforeColon:      LongBool;
+    SpaceAfterColon:       LongBool;
+    SpaceAroundAssign:     LongBool;
+    SpaceAroundOperator:   LongBool;
+    SpaceAfterComma:       LongBool;
+    SpaceBeforeSemicolon:  LongBool;
+    BeginOnNewLine:        LongBool;
   end;
 
   IPluginNode = Interface(IUnknown)
@@ -172,6 +217,11 @@ type
     function  GetChild(aIndex: Integer): IPluginNode; stdcall;
     function  GetNamedChild(const aName: WideString): IPluginNode; stdcall;
     function  HasNamedChild(const aName: WideString): LongBool; stdcall;
+  end;
+
+  IPluginNodeHostAccess = Interface(IUnknown)
+    ['{F1A2B3C4-D5E6-7890-ABCD-EF1234500005}']
+    function GetRawNodeInterface: IUnknown; stdcall;
   end;
 
   IPluginWriter = Interface(IUnknown)
@@ -188,11 +238,17 @@ type
     procedure EndAlignment; stdcall;
   end;
 
+  IPluginWriterHostAccess = Interface(IUnknown)
+    ['{F1A2B3C4-D5E6-7890-ABCD-EF1234500006}']
+    function GetRawWriterInterface: IUnknown; stdcall;
+  end;
+
   IPluginHost = Interface(IUnknown)
-    ['{F1A2B3C4-D5E6-7890-ABCD-EF1234500003}']
+    ['{F1A2B3C4-D5E6-7890-ABCD-EF1234500004}']
     procedure Dispatch(aNode: IPluginNode); stdcall;
     function  ApplyCase(const aKeyword: WideString): WideString; stdcall;
     function  NormalizeUnitName(const aName: WideString): WideString; stdcall;
+    function  LookupBuiltinType(const aIdentifier: WideString): WideString; stdcall;
   end;
 
   // Unified signature for all Do* plugin functions
@@ -203,5 +259,23 @@ type
   TGetPluginName    = function: WideString; stdcall;
 
 implementation
+
+uses
+  System.SysUtils;
+
+function SubBranchName(aIndex: Integer): WideString;
+begin
+  Result := 'Branch.' + IntToStr(aIndex);
+end;
+
+function SubDeclareName(aIndex: Integer): WideString;
+begin
+  Result := 'Declare.' + IntToStr(aIndex);
+end;
+
+function SubParamName(aIndex: Integer): WideString;
+begin
+  Result := 'Param.' + IntToStr(aIndex);
+end;
 
 end.

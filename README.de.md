@@ -13,10 +13,10 @@ formatiert werden.
 
 ## Hauptmerkmale
 
-- **Ein-Datei-SDK** — nur `PluginSDK.pas` wird benötigt
+- **Ein-Datei-SDK** — für klassische Plugins wird nur `PluginSDK.pas` benötigt
 - **37 überschreibbare Formatierungsfunktionen** — von `DoUses` bis `DoIf` bis `DoMethod`
 - **DLL-grenzsichere Typen** — `WideString`, `LongBool`, COM-Interfaces (`stdcall`)
-- **Keine Host-Abhängigkeiten** — Plugins linken nur gegen das SDK, nicht gegen den Formatter
+- **Keine Host-Abhängigkeiten** — Plugins können nur gegen das SDK linken, nicht gegen den Formatter
 - **Selektives Überschreiben** — nur die Funktionen exportieren, die man ändern will;
   alles andere fällt auf das Default-Verhalten des Formatters zurück
 - **Kompatibel** mit Delphi, Free Pascal, C++ und C#
@@ -56,11 +56,23 @@ mit vier Parametern aufgerufen:
 |-----------|-------------|
 | `aNode: IPluginNode` | Der AST-Knoten (Typ, Text, Kinder) |
 | `aWriter: IPluginWriter` | Ausgabe-Writer (Write, Writeln, NewLine, Indent, Alignment) |
-| `aHost: IPluginHost` | Host-Dienste (Dispatch, ApplyCase, NormalizeUnitName) |
+| `aHost: IPluginHost` | Host-Dienste (`Dispatch`, `ApplyCase`, `NormalizeUnitName`, `LookupBuiltinType`) |
 | `aRules: PPluginRules` | Aktuelle Formatierungsregeln (Einrückung, Abstände, etc.) |
 
 Rückgabe `True` = Plugin hat den Knoten verarbeitet. `False` = Formatter
 verwendet sein Default-Verhalten.
+
+## Erweiterter Host-Zugriff
+
+`PluginSDK.pas` enthält jetzt zusätzlich zwei optionale Host-Access-Interfaces:
+
+- `IPluginNodeHostAccess.GetRawNodeInterface`
+- `IPluginWriterHostAccess.GetRawWriterInterface`
+
+Sie sind für fortgeschrittene In-Process-Plugins gedacht, die temporär auf die
+internen Node- oder Writer-Interfaces des Hosts zugreifen müssen. Normale
+externe Plugins brauchen sie nicht und können weiter nur mit `IPluginNode`,
+`IPluginWriter`, `IPluginHost` und `PPluginRules` arbeiten.
 
 ## Lizenz
 
@@ -69,4 +81,3 @@ MIT-Lizenz — siehe [LICENSE.md](LICENSE.md)
 ## Status
 
 ⚠️ **Alpha** — Die API kann sich noch ändern. Feedback ist willkommen!
-

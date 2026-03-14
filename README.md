@@ -12,10 +12,10 @@ full control over how specific language constructs are rendered.
 
 ## Key Features
 
-- **Single-file SDK** — only `PluginSDK.pas` is needed to build a plugin
+- **Single-file SDK** — only `PluginSDK.pas` is required to build a classic plugin
 - **37 overridable formatting functions** — from `DoUses` to `DoIf` to `DoMethod`
 - **DLL-boundary-safe types** — `WideString`, `LongBool`, COM interfaces (`stdcall`)
-- **No host dependencies** — plugins link only against the SDK, not the formatter itself
+- **No host dependencies** — plugins can link only against the SDK, not the formatter itself
 - **Selective overriding** — export only the functions you want to customize;
   everything else falls back to the formatter's default behavior
 - **Compatible** with Delphi, Free Pascal, C++ and C#
@@ -55,11 +55,23 @@ called with four arguments:
 |-----------|-------------|
 | `aNode: IPluginNode` | The AST node to format (type, text, children) |
 | `aWriter: IPluginWriter` | Output writer (Write, Writeln, NewLine, Indent, Alignment) |
-| `aHost: IPluginHost` | Host services (Dispatch children, ApplyCase, NormalizeUnitName) |
+| `aHost: IPluginHost` | Host services (`Dispatch`, `ApplyCase`, `NormalizeUnitName`, `LookupBuiltinType`) |
 | `aRules: PPluginRules` | Current formatting rules (indentation, spacing, etc.) |
 
 Return `True` to indicate the plugin handled the node, or `False` to let the
 formatter apply its default behavior.
+
+## Advanced Host Access
+
+`PluginSDK.pas` now also exposes two optional host-access interfaces:
+
+- `IPluginNodeHostAccess.GetRawNodeInterface`
+- `IPluginWriterHostAccess.GetRawWriterInterface`
+
+These are intended for advanced in-process plugins that need temporary access
+to the host's internal node or writer interfaces. Regular external plugins do
+not need them and can continue to work with `IPluginNode`, `IPluginWriter`,
+`IPluginHost`, and `PPluginRules` only.
 
 ## License
 
@@ -68,4 +80,3 @@ MIT License — see [LICENSE.md](LICENSE.md)
 ## Status
 
 ⚠️ **Alpha** — The API may still change. Feedback is welcome!
-

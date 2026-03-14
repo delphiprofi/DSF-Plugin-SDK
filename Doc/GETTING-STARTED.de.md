@@ -50,7 +50,19 @@ function DoUses(aNode: IPluginNode; aWriter: IPluginWriter;
   - `Dispatch(node)` — Kind-Knoten zurück an den Formatter delegieren
   - `ApplyCase('keyword')` — konfigurierte Keyword-Schreibweise anwenden
   - `NormalizeUnitName('name')` — Unit-Namen normalisieren
+  - `LookupBuiltinType('Integer')` — eingebaute Typ-Aliase wie im Host auflösen
 - **`aRules`** — Die aktuellen Formatierungsregeln (nur lesen)
+
+## Optionaler erweiterter Host-Zugriff
+
+Die meisten Plugins brauchen nur die vier Interfaces oben. Für fortgeschrittene
+In-Process-Szenarien exportiert das SDK zusätzlich:
+
+- `IPluginNodeHostAccess.GetRawNodeInterface`
+- `IPluginWriterHostAccess.GetRawWriterInterface`
+
+Damit kann ein Plugin die rohen Host-Interfaces hinter `aNode` und `aWriter`
+anfordern. Das ist optional und für normale externe DLL-Plugins nicht nötig.
 
 ## Schritt 3: Pflicht- und empfohlene Exports
 
@@ -94,6 +106,9 @@ end;
 - **Beispiele ansehen**: `FormatterPlugin.SampleImpl.pas` enthält alle 37
   Funktionen als Referenz. `FrankPlugin.DoUses.pas` zeigt ein reales
   Uses-Formatierungs-Plugin
+- **Named-Child-Helfer nutzen**: `PluginSDK.pas` enthält jetzt Konstanten wie
+  `cSubCondition`, `cSubInheritance`, `cSubGenerics` sowie Hilfsfunktionen wie
+  `SubBranchName`, `SubDeclareName` und `SubParamName`
 
 ## Verfügbare Do*-Funktionen
 
@@ -117,4 +132,3 @@ end;
 | `DoWith` | `with..do` | With-Anweisung |
 | `DoTry` | `try..except/finally` | Ausnahmebehandlung |
 | ... | ... | und 19 weitere — siehe `PluginSDK.pas` |
-
